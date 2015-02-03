@@ -48,14 +48,20 @@ object List { // `List` companion object. Contains functions for creating and wo
 
 
   def tail[A](l: List[A]): List[A] = l match {
-    case Nil => Nil
-    case Cons(h, Nil) => Nil
-    case Cons(h, t) => t
+    case Nil => sys.error("tail of empty list")
+    case Cons(_, t) => t
   }
 
-  def setHead[A](l: List[A], h: A): List[A] = sys.error("todo")
+  def setHead[A](l: List[A], h: A): List[A] = l match {
+    case Nil => sys.error("setHead on empty list")
+    case Cons(_, t) => Cons(h, t)
+  }
 
-  def drop[A](l: List[A], n: Int): List[A] = sys.error("todo")
+  def drop[A](l: List[A], n: Int): List[A] = (l,n) match {
+    case (Nil,_) => sys.error("drop of empty list")
+    case (_, 0) => l
+    case (Cons(_, t), _) => drop(t, n-1)
+  }
 
   def dropWhile[A](l: List[A], f: A => Boolean): List[A] = sys.error("todo")
 
