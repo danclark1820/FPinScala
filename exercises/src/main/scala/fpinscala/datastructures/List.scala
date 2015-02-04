@@ -70,7 +70,15 @@ object List { // `List` companion object. Contains functions for creating and wo
       case _ => l
   }
 
-  def init[A](l: List[A]): List[A] = sys.error("todo")
+  def init[A](l: List[A]): List[A] =  {
+    @annotation.tailrec
+    def go(l: List[A], acc:List[A]):List[A] = l match {
+      case Nil => sys.error("init of empty list")
+      case Cons(h,Nil) => acc
+      case Cons(h,t) => go(t, append(acc, List(h)))
+    }
+    go(l, Nil)
+  }
 
   def length[A](l: List[A]): Int = sys.error("todo")
 
