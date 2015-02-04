@@ -104,8 +104,20 @@ object List { // `List` companion object. Contains functions for creating and wo
       case Cons(h, t) => foldLeft(t, f(z,h))(f)
     }
 
+  def sumLeft(l: List[Int]):Int =
+    foldLeft(l, 0)(_ + _)
+
+  def productLeft(l: List[Double]): Double =
+    foldLeft(l, 1.0)(_ * _)
+
+  def lengthLeft[A](l: List[A]): Int =
+    foldLeft(l, 0)((z, h) => z + 1)
+
+  def reverse[A](l: List[A]):List[A]  =
+    foldLeft(l, List[A]())((z,h) => Cons(h,z))
+
   def length[A](l: List[A]): Int =
-    foldRight(l, 0)((a, b) => b + 1) //Must be b + 1 and not a + 1 based on foldRight def
+    foldRight(l, 0)((h, z) => z + 1) //Must be b + 1 and not a + 1 based on foldRight def
 
   def map[A,B](l: List[A])(f: A => B): List[B] = sys.error("todo")
 }
