@@ -80,6 +80,25 @@ object List { // `List` companion object. Contains functions for creating and wo
     go(l, Nil)
   }
 
+  def init2[A](l: List[A]): List[A] = l match {
+    case Nil => sys.error("init of empty list")
+    case Cons(_, Nil) => Nil
+    case Cons(h, t) => Cons(h, init(t))
+  }
+
+  def init3[A](l: List[A]): List[A] = {
+    import collection.mutable.ListBuffer
+    val buf = new ListBuffer[A]
+    @annotation.tailrec
+    def go(cur: List[A]): List[A] = cur match {
+      case Nil => sys.error("init of empty list")
+      case Cons(_,Nil) => List(buf.toList: _*)
+      case Cons(h,t) => buf += h; go(t)
+    }
+    go(l)
+  }
+
+
   def length[A](l: List[A]): Int = sys.error("todo")
 
   def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B = sys.error("todo")
