@@ -37,9 +37,9 @@ object List { // `List` companion object. Contains functions for creating and wo
   def foldRight[A,B](as: List[A], z: B)(f: (A, B) => B): B = // Utility functions
     as match {
       case Nil => z
-      case Cons(x, xs) => f(x, foldRight(xs, z)(f))
+      case Cons(h, t) => f(h, foldRight(t, z)(f))
     }
-  
+
   def sum2(ns: List[Int]) = 
     foldRight(ns, 0)((x,y) => x + y)
   
@@ -98,11 +98,14 @@ object List { // `List` companion object. Contains functions for creating and wo
     go(l)
   }
 
+  def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B =
+    l match {
+      case Nil => z
+      case Cons(h, t) => foldLeft(t, f(z,h))(f)
+    }
 
   def length[A](l: List[A]): Int =
     foldRight(l, 0)((a, b) => b + 1) //Must be b + 1 and not a + 1 based on foldRight def
-
-  def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B = sys.error("todo")
 
   def map[A,B](l: List[A])(f: A => B): List[B] = sys.error("todo")
 }
