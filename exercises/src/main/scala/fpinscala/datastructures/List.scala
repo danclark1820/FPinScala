@@ -40,6 +40,12 @@ object List { // `List` companion object. Contains functions for creating and wo
       case Cons(h, t) => f(h, foldRight(t, z)(f))
     }
 
+  def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B =
+    l match {
+      case Nil => z
+      case Cons(h, t) => foldLeft(t, f(z,h))(f)
+    }
+
   def sum2(ns: List[Int]) = 
     foldRight(ns, 0)((x,y) => x + y)
   
@@ -98,12 +104,6 @@ object List { // `List` companion object. Contains functions for creating and wo
     go(l)
   }
 
-  def foldLeft[A,B](l: List[A], z: B)(f: (B, A) => B): B =
-    l match {
-      case Nil => z
-      case Cons(h, t) => foldLeft(t, f(z,h))(f)
-    }
-
   def sumLeft(l: List[Int]):Int =
     foldLeft(l, 0)(_ + _)
 
@@ -116,8 +116,22 @@ object List { // `List` companion object. Contains functions for creating and wo
   def reverse[A](l: List[A]):List[A]  =
     foldLeft(l, List[A]())((z,h) => Cons(h,z))
 
+  def appendViaFoldRight[A](l: List[A], r: List[A]): List[A] =
+    foldRight(l, r)(Cons(_,_))
+
   def length[A](l: List[A]): Int =
     foldRight(l, 0)((h, z) => z + 1) //Must be b + 1 and not a + 1 based on foldRight def
 
-  def map[A,B](l: List[A])(f: A => B): List[B] = sys.error("todo")
+  def add1(l:List[Double]):List[Double] =
+    foldRight(l, Nil:List[Double])((h,t) => Cons(h+1.0, t))
+
+  def doubleToString(l:List[Double]):List[String] =
+    foldRight(l, Nil:List[String])((h,t) => Cons(h.toString, t))
+
+  def map[A,B](l: List[A])(f: A => B): List[B] =
+    foldRight(l, Nil:List[B])((h,t) => Cons(f(h), t))
+
+  def filter[A](as: List[A])(f: A => Boolean): List[A] =
+    foldRight(as, Nil:List[A])((h,t) => if (f(h)) Cons(h,t) else t)
+
 }
