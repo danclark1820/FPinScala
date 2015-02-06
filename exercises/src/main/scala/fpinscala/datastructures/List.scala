@@ -141,18 +141,18 @@ object List { // `List` companion object. Contains functions for creating and wo
     foldRight(as, Nil:List[B])((h,t) => concat(map(as)(f)))
 
   def filterViaFlatMap[A](as: List[A])(f: A => Boolean): List[A] =
-    flatMap(as)(a => if(a) List(a) else Nil)
+    flatMap(as)(a => if(f(a)) List(a) else Nil)
 
-  def addCorrespondingList(a: List[Int], b:List[Int]) = (a,b) match {
+  def addCorrespondingList(a: List[Int], b:List[Int]):List[Int] = (a,b) match {
     case (Nil, _) => Nil
     case (_, Nil) => Nil
-    case (Cons(h1, t1), Cons(h2, t2) => Cons(h1 + h2, addCorrespondingList(t1, t2))
+    case (Cons(h1, t1), Cons(h2, t2)) => Cons((h1 + h2), addCorrespondingList(t1, t2))
   }
 
-  def zipWith[T, T](a: List[T], b:List[T])(f:(T,T) => T): List[T] = (a,b) match {
+  def zipWith[A, B, C](a: List[A], b:List[B])(f:(A,B) => C): List[C] = (a,b) match {
     case (Nil, _) => Nil
     case (_, Nil) => Nil
-    case (Cons(h1, t1), Cons(h2, t2) => Cons(f(h1, h2), zipWith(t1, t2))
+    case (Cons(h1, t1), Cons(h2, t2)) => Cons(f(h1, h2), zipWith(t1, t2)(f))
   }
 
   def foldTail[A, B](l:List[A], z:B)(f: (B, A) => B): B =
