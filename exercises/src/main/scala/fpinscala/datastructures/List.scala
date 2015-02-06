@@ -143,13 +143,13 @@ object List { // `List` companion object. Contains functions for creating and wo
   def foldTail[A, B](l:List[A], z:B)(f: (B, A) => B): B =
    l match {
     case Nil => z
-    case Cons(h,t) => fold(t, f(z, h))(f)
+    case Cons(h,t) => foldTail(t, f(z, h))(f)
    }
 
   def foldNotTail[A, B](l:List[A], z:B)(f: (A, B) => B): B =
     l match {
       case Nil => z
-      case Cons(h,t) =>  f(h, fold2(t, z)(f))
+      case Cons(h,t) =>  f(h, foldNotTail(t, z)(f))
     }
 
   def factorialTail(n:Int):Int = {  
@@ -159,7 +159,6 @@ object List { // `List` companion object. Contains functions for creating and wo
     }
     go(n, 1)
   }
-
 }
 
 
