@@ -41,9 +41,9 @@ object Tree {
   def countLeaves[A](t:Tree[A]):Int =
     fold(t)(a => 1)(_ + _)
 
-  def maxViaFold[A](t:Tree):Int =
+  def maxViaFold(t:Tree[Int]):Int =
     fold(t)(a => a)(_ max _)
 
-  def depthViaFold[A](t:Tree):Int =
+  def depthViaFold[A](t:Tree[A]):Int =
     fold(t)(a => 0)((d1, d2) => 1 + (d1 max d2))
 }
