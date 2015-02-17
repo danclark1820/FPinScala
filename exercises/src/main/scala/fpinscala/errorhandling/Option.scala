@@ -31,7 +31,17 @@ sealed trait Option[+A] {
   def orElse_1[B>:A](ob: => Option[B]): Option[B] =
     this map(Some(_)) getOrElse ob
 
-  def filter(f: A => Boolean): Option[A] = sys.error("todo")
+  def filter(f: A => Boolean): Option[A] = this match {
+    case None => None
+    case Some(a) => if (f(a)) Some(a) else None
+  }
+
+  def filter_1(f: A => Boolean): Option[A] = this match {
+    case Some(a) if f(a) => this
+    case _ => None
+  }
+
+
 }
 case class Some[+A](get: A) extends Option[A]
 case object None extends Option[Nothing]
