@@ -47,6 +47,7 @@ case class Some[+A](get: A) extends Option[A]
 case object None extends Option[Nothing]
 
 object Option {
+
   def failingFn(i: Int): Int = {
     val y: Int = throw new Exception("fail!") // `val y: Int = ...` declares `y` as having type `Int`, and sets it equal to the right hand side of the `=`.
     try {
@@ -67,7 +68,10 @@ object Option {
   def mean(xs: Seq[Double]): Option[Double] =
     if (xs.isEmpty) None
     else Some(xs.sum / xs.length)
-  def variance(xs: Seq[Double]): Option[Double] = sys.error("todo")
+
+  def variance(xs: Seq[Double]): Option[Double] = {
+    mean(xs) flatMap (m => mean(xs.map(x => math.pow(x - m, 2))))
+  }
 
   def map2[A,B,C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] = sys.error("todo")
 
